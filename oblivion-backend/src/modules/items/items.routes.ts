@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import {
   createItemSchema,
   updateItemSchema
@@ -10,7 +10,7 @@ import {
 } from "./items.service";
 
 export async function itemsRoutes(app: FastifyInstance) {
-  app.post("/items", async (req, res) => {
+  app.post("/items", async (req: FastifyRequest, res: FastifyReply) => {
     // @ts-ignore: Fastify types for Zod are a bit tricky without extra setup, manual validation for now or trust middleware if we add it. 
     // Ideally we'd use fastify-type-provider-zod but let's stick to the prompt's request for manual parse or simple integration.
     // The prompt snippet used `createItemSchema.parse(req.body)`.
@@ -19,7 +19,7 @@ export async function itemsRoutes(app: FastifyInstance) {
     res.send(item);
   });
 
-  app.patch("/items/:id", async (req, res) => {
+  app.patch("/items/:id", async (req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply) => {
     // @ts-ignore
     const body = updateItemSchema.parse(req.body);
     // @ts-ignore
