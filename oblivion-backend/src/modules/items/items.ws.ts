@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
-import { WebSocket } from "ws";
+import { WebSocket } from "ws"; // Import the standard WebSocket type
 import {
     registerClient,
     unregisterClient
@@ -13,6 +13,10 @@ export async function itemsWs(app: FastifyInstance) {
         socket.on("close", () => {
             req.log.info("WebSocket client disconnected");
             unregisterClient(socket);
+        });
+
+        socket.on("error", (err) => {
+            req.log.error(err, "WebSocket error");
         });
     });
 }
